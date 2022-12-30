@@ -68,3 +68,49 @@ airports.show()
 
 airports = airports.withColumnRenamed('faa', 'dest')
 
+flights_with_airport = flights.join(airports, on="dest", how="leftouter")
+flights_with_airport.show()
+
+planes = spark.read.csv("Data/planes.csv", header = True, inferSchema = True)
+planes.show()
+
+planes = planes.withColumnRenamed('year', 'plane_year')
+
+model_data = flights.join(planes, on='tailnum', how='leftouter')
+model_data.show()
+
+model_data.describe()
+
+model_data = model_data.withColumn('arr_delay', model_data.arr_delay.cast('integer'))
+
+model_data = model_data.withColumn('air_time', model_data.air_time.cast('integer'))
+
+model_data = model_data.withColumn('month', model_data.month.cast('integer'))
+
+model_data = model_data.withColumn('plane_year', model_data.plane_year.cast('integer'))
+
+model_data.describe('arr_delay', 'air_time', 'month', 'plane_year').show()
+
+model_data = model_data.withColumn('plane_age', model_data.year - model_data.plane_year)
+
+model_data = model_data.withColumn('is_late', model_data.arr_delay > 0)
+
+model_data = model_data.withColumn('label', model_data.is_late.cast('integer'))
+
+model_data.select('is_late', 'arr_delay').show()
+
+model_data.filter("arr_delay is not NULL and dep_delay is not NULL and air_time is not NULL and plane_year is not NULL")
+
+from pyspark.ml.feature import StringIndexer, OneHotEncoder
+
+carr_indexer = StringIndexer(inputCol = 'carrier', outputCol = 'Carrier_index')
+
+carr_encoder = OneHotEncoder(inputCol = 'carrier_index', outputCol = 'carr_fact')
+
+dest_indexer = StringIndexer(inputCol = 'dest', outputCol = 'dest_index')
+
+dest_encoder = OneHotEncoder(inputCol = 'dest_index', outputCol = 'dest_fact')
+
+from pyspark.ml.feature import VectorAssembler
+
+##skiping rest of notebook bcoz not relavent to me.. ML stuff.
