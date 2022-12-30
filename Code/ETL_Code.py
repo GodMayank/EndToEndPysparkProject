@@ -1,3 +1,13 @@
+"""
+TO RUN THE SCRIPT
+1. go to the project dir
+	cd /home/datamaking/Documents/kaggle/EndToEndPysparkProject
+2. use spark-submit to run the job.
+	spark-submit Code/ETL_Code.py
+
+
+"""
+
 from pyspark.sql import SparkSession
 
 jobname = "ETL_Code"
