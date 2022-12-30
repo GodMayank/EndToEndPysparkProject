@@ -114,3 +114,5 @@ dest_encoder = OneHotEncoder(inputCol = 'dest_index', outputCol = 'dest_fact')
 from pyspark.ml.feature import VectorAssembler
 
 ##skiping rest of notebook bcoz not relavent to me.. ML stuff.
+
+print('FINISHED')
